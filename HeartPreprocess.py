@@ -58,7 +58,10 @@ def main():
     full = pd.DataFrame(remove_missing(full), columns=full_column_names)
 
     full_y = full.iloc[:,57]
-    full_x = full.drop(columns=['58', '76'])
+    full_x = full.drop(columns=['58','75', '76'])
+    full_column_names.remove('58')
+    full_column_names.remove('75')
+    full_column_names.remove('76')
 
     recursive_feature_elimination_full(full_x, full_y, full_column_names)
 
@@ -147,6 +150,7 @@ def recursive_feature_elimination_full(df_X, df_Y, col):
     #df_X[['age', 'trestbps', 'chol', 'thalach']] = scaler.fit_transform(df_X[['age', 'trestbps', 'chol', 'thalach']])
     #df_X[['age', 'trestbps', 'chol', 'thalach', 'sex', 'cp', 'fbs', 'restECG', 'OldPeak', 'Slope', 'Thal', 'Ca', 'ExAng']] = scaler.fit_transform(df_X[['age', 'trestbps', 'chol', 'thalach', 'sex', 'cp', 'fbs', 'restECG', 'OldPeak', 'Slope', 'Thal', 'Ca', 'ExAng']])
     print(df_X)
+    
     df_X = scaler.fit_transform(df_X)
 
     df_X = pd.DataFrame(df_X, columns=col)
