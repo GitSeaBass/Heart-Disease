@@ -63,15 +63,31 @@ def main():
     full_column_names.remove('75')
     full_column_names.remove('76')
 
-    recursive_feature_elimination_full(full_x, full_y, full_column_names)
+    #recursive_feature_elimination_full(full_x, full_y, full_column_names)
 
     #print number of instances in each dataset
     #print(f"c_len: {cleve_data.shape}, h_len: {hun_data.shape}, s_len: {switz_data.shape}, v_len: {va_data.shape}")
     
     #VT on dataset, currently not removing any features
     #print(variance_feature_selection(cleve_data))
-    
+    #print(variance_feature_selection(full_x))
+
     #RFE on different datasets
+    
+    #getting the ranks of all variables
+    #ranks = []
+    #for _ in range(50):
+    #    ranks.append(recursive_feature_elimination(all_X,all_Y))
+
+    #means = np.array(ranks).mean(axis=0)
+    #print(ranks)
+    #print(means)
+
+    trimmed_all = all.drop(columns = ['fbs', 'Slope', 'chol', 'trestbps'])
+    #pd.concat([trimmed_all, all_Y], axis = 1)
+    print(trimmed_all)
+    trimmed_all.to_csv('./heart+disease/feature-selected-processed.all.data', index=False)
+
     #recursive_feature_elimination(cleve_X, cleve_Y)
     #recursive_feature_elimination(hun_X, hun_Y)
     #recursive_feature_elimination(switz_X, switz_Y)
@@ -123,7 +139,7 @@ def recursive_feature_elimination(df_X, df_Y):
 
     n = int(len(df_X.columns)/2)
     
-    selector = RFE(logreg, n_features_to_select=14, step=1)
+    selector = RFE(logreg, n_features_to_select=1, step=1)
     selector = selector.fit(x_train, y_train)
     
     print('')
@@ -143,6 +159,11 @@ def recursive_feature_elimination(df_X, df_Y):
     
     print(f'Size of selector.support_: {len(selector.support_)}, {selector.support_}')
     print(accuracy_score(y_test, selector.predict(x_test)))
+
+
+    rankings = np.array([int(x) for x in selector.ranking_])
+
+    return rankings
 
 def recursive_feature_elimination_full(df_X, df_Y, col):
     scaler = StandardScaler()
@@ -207,9 +228,9 @@ def forward_elim(df_X, df_Y, dir):
     #train test split
     x_train, x_test, y_train, y_test = train_test_split(x_scaled, df_Y, test_size=.2)
 
-    knn = KNeighborsClassifier(n_neighbors=10)
-    sfs = SequentialFeatureSelector(knn, n_features_to_select=7, direction=dir)
-    sfs.fit(x_train, y_train)
+    #knn = KNeighborsClassifier(n_neighbors=10)
+    #sfs = SequentialFeatureSelector(knn, n_features_to_select=7, direction=dir)
+    #sfs.fit(x_train, y_train)
 
     #print(sfs.get_support())
     #print(sfs.transform(x_train).shape)
