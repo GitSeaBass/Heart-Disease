@@ -71,8 +71,6 @@ def main():
     #VT on dataset, currently not removing any features
     #print(variance_feature_selection(cleve_data))
     #print(variance_feature_selection(full_x))
-
-    #RFE on different datasets
     
     #getting the ranks of all variables
     #ranks = []
@@ -83,10 +81,31 @@ def main():
     #print(ranks)
     #print(means)
 
-    trimmed_all = all.drop(columns = ['fbs', 'Slope', 'chol', 'trestbps'])
+    #creating feature selected csv files from datasets
+    #cleveland
+    trimmed_cleveland = cleve_X.drop(columns = ['age', 'trestbps', 'chol'])
+    trimmed_cleveland = pd.concat([trimmed_cleveland, cleve_Y], axis = 1)
+    trimmed_cleveland.to_csv('./heart+disease/feature-selected-processed.cleveland.data', index=False)
+    #hungarian
+    trimmed_hungarian = hun_X.drop(columns = ['trestbps', 'restECG', 'thalach', 'age', 'Ca'])
+    trimmed_hungarian = pd.concat([trimmed_hungarian, hun_Y], axis = 1)
+    trimmed_hungarian.to_csv('./heart+disease/feature-selected-processed.hungarian.data', index=False)
+    #switzerland
+    trimmed_switzerland = switz_X.drop(columns = ['trestbps', 'Slope', 'Ca', 'chol'])
+    trimmed_switzerland = pd.concat([trimmed_switzerland, switz_Y], axis = 1)
+    trimmed_switzerland.to_csv('./heart+disease/feature-selected-processed.switzerland.data', index=False)
+    #va
+    trimmed_va = va_X.drop(columns = ['thalach', 'trestbps', 'Slope', 'chol', 'Ca'])
+    trimmed_va = pd.concat([trimmed_va, va_Y], axis = 1)
+    trimmed_va.to_csv('./heart+disease/feature-selected-processed.va.data', index=False)
+    #all
+    #trimmed_all = all.drop(columns = ['fbs', 'Slope', 'chol', 'trestbps'])
     #pd.concat([trimmed_all, all_Y], axis = 1)
-    print(trimmed_all)
-    trimmed_all.to_csv('./heart+disease/feature-selected-processed.all.data', index=False)
+    #print(trimmed_all)
+    #trimmed_all.to_csv('./heart+disease/feature-selected-processed.all.data', index=False)
+
+
+    #RFE on different datasets
 
     #recursive_feature_elimination(cleve_X, cleve_Y)
     #recursive_feature_elimination(hun_X, hun_Y)
